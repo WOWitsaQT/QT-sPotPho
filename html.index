@@ -1,1 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>WOWitsaQT</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<!-- Main universe -->
+<div id="universe" aria-label="Interactive star field of portfolio tabs">
+<!-- Layered parallax backgrounds for depth -->
+<div class="layer layer--back"></div>
+<div class="layer layer--mid"></div>
+<div class="layer layer--front" id="stars-layer" aria-live="polite"></div>
+</div>
 
+<!-- Work modal -->
+<dialog id="workModal" aria-labelledby="workTitle">
+<button class="close" id="closeModal" aria-label="Close">✕</button>
+<div class="work-card">
+<img id="workThumb" alt="" />
+<div class="work-body">
+<h2 id="workTitle">Title</h2>
+<p id="workDesc">Description</p>
+<a id="workLink" href="#" target="_blank" rel="noopener">Open project ↗</a>
+</div>
+</div>
+</dialog>
+
+<!-- Music toggle button -->
+<button id="musicBtn" class="music-btn" aria-haspopup="true" aria-controls="musicPanel" aria-expanded="false" title="Music">
+<img src="./assets/icons/music.png" alt="Music" />
+</button>
+
+<!-- Music panel -->
+<aside id="musicPanel" class="music-panel" aria-hidden="true">
+<header>
+<h3>Now Playing</h3>
+<button id="musicClose" class="close" aria-label="Close music">✕</button>
+</header>
+<audio id="player" controls preload="none"></audio>
+<ol id="playlist" class="playlist"></ol>
+</aside>
+
+<script src="script.js"></script>
+</body>
+</html>
