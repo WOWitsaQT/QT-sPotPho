@@ -1,1 +1,128 @@
+:root{
+/* swap this to your rocket asset; last two numbers are hotspot (x,y) */
+--rocket-cursor: url("./assets/icons/rocket.png") 16 16, auto;
 
+- -bg-space-1: radial-gradient(1200px 800px at 20% 30%, #2c2a72 0%, transparent 60%),
+radial-gradient(900px 700px at 80% 70%, #6b2c8f 0%, transparent 60%);
+--bg-space-2: radial-gradient(1000px 900px at 60% 40%, #0d1b3d 0%, transparent 70%),
+radial-gradient(1200px 900px at 30% 80%, #1a0f2e 0%, transparent 70%);
+- -glass: rgba(255,255,255,0.08);
+--glass-br: rgba(255,255,255,0.25);
+--text: #f7f7fb;
+--accent: #9ae6ff;
+}
+- { box-sizing: border-box; }
+html, body {
+height: 100%;
+margin: 0;
+background: #05060f;
+color: var(--text);
+cursor: var(--rocket-cursor);
+font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+overflow: hidden; /* keeps scrollbars off; stars are within the viewport */
+}
+
+/* universe layers */
+#universe {
+position: fixed;
+inset: 0;
+overflow: hidden;
+}
+.layer {
+position: absolute; inset: 0;
+pointer-events: none;
+}
+.layer--back { background-image: var(--bg-space-2); opacity: .7; filter: blur(1px); }
+.layer--mid  { background-image: var(--bg-space-1); opacity: .9; mix-blend-mode: screen; }
+.layer--front{ position: absolute; inset: 0; pointer-events: auto; }
+
+/* star/planet nodes */
+.node {
+position: absolute;
+width: 48px; height: 48px;
+background-size: contain;
+background-repeat: no-repeat;
+background-position: center;
+transform: translate(-50%, -50%); /* center on its (x,y) */
+filter: drop-shadow(0 0 6px rgba(255,255,255,.5));
+transition: transform .18s ease, filter .18s ease;
+will-change: transform;
+}
+.node:focus-visible { outline: 2px dashed var(--accent); outline-offset: 4px; }
+.node:hover { transform: translate(-50%, -50%) scale(1.08); filter: drop-shadow(0 0 10px rgba(255,255,255,.85)); }
+
+/* float animation */
+@keyframes bob {
+from { transform: translate(-50%, -50%) translateY(-3px); }
+to   { transform: translate(-50%, -50%) translateY(3px); }
+}
+.node[data-depth="0"] { animation: bob 3.4s ease-in-out infinite alternate; }
+.node[data-depth="1"] { animation: bob 4.2s ease-in-out infinite alternate; }
+.node[data-depth="2"] { animation: bob 5.0s ease-in-out infinite alternate; }
+
+@media (prefers-reduced-motion: reduce){
+.node { animation: none; }
+}
+
+/* modal for work */
+dialog#workModal {
+border: none;
+padding: 0;
+width: min(820px, 92vw);
+background: linear-gradient(180deg, rgba(10,12,20,.85), rgba(10,12,20,.75));
+backdrop-filter: blur(12px);
+color: var(--text);
+border-radius: 16px;
+box-shadow: 0 12px 60px rgba(0,0,0,.6), inset 0 0 0 1px var(--glass-br);
+}
+dialog::backdrop { background: rgba(0,0,0,.55); }
+
+.work-card { display: grid; grid-template-columns: 240px 1fr; gap: 20px; padding: 20px; }
+.work-card img { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; background: #111; }
+.work-body h2 { margin: 0 0 6px; }
+.work-body p  { opacity: .9; line-height: 1.5; }
+.work-body a  { color: var(--accent); text-decoration: none; border-bottom: 1px dashed var(--accent); }
+.close {
+position: absolute; top: 8px; right: 10px;
+background: var(--glass); color: var(--text);
+border: 1px solid var(--glass-br); border-radius: 10px; padding: 6px 10px; cursor: pointer;
+}
+
+/* music button + drawer */
+.music-btn{
+position: fixed; right: 14px; top: 14px;
+width: 44px; height: 44px; border-radius: 50%;
+display: grid; place-items: center;
+background: var(--glass);
+border: 1px solid var(--glass-br);
+backdrop-filter: blur(8px);
+z-index: 3;
+}
+.music-btn img{ width: 26px; height: 26px; }
+
+.music-panel{
+position: fixed; right: 16px; top: 70px;
+width: min(360px, 94vw);
+max-height: min(70vh, 560px);
+background: rgba(15,18,32,.86);
+border: 1px solid var(--glass-br);
+border-radius: 14px;
+padding: 12px;
+transform: translateY(-12px) scale(.98);
+opacity: 0; pointer-events: none;
+transition: transform .2s ease, opacity .2s ease;
+z-index: 3;
+}
+.music-panel[aria-hidden="false"]{
+opacity: 1; pointer-events: auto; transform: translateY(0) scale(1);
+}
+.music-panel header{
+display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;
+}
+.playlist{
+margin:10px 0 0; padding:0 0 10px 18px; overflow:auto; max-height: 45vh;
+}
+.playlist li{
+margin-bottom: 6px; cursor: pointer;
+}
+.playlist li.active{ color: var(--accent); }
